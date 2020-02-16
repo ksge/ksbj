@@ -1,10 +1,12 @@
-' K.I.S.S. STRIP BLACK JACK VERSION 1.0 20181129
+' K.I.S.S. STRIP BLACK JACK VERSION 1.2 20200214
 ' A STRIP BLAKCJACK GAME BUILD WITH FREEBASIC AND BASED ON KSGE (KISS STRIP GAME ENGINE) 
-' COMPILE WITH FREEBASIC COMPILER (FBC) TESTET WITH VERSION 1.0.5 ON LINUX (UBUNTU 18.04) AND WINDOWS 10
-' COMPILE WITH COMMAND FBC.EXE -s gui ksbj.bas
+' COMPILE WITH FREEBASIC COMPILER (FBC) TESTET WITH VERSION 1.7.1 ON LINUX (DEBIAN 10 + UBUNTU 18.04) AND WINDOWS 10
 ' AFTER COMPILED RUN THE BINARY WITH THE CORRECT PARAMETERS: KSBJ row number    game name    model name/folder   debug(0=no 1=yes)
 ' example; ksbj 2 "KISS BLACKJACK" "marylin" 0 
-print "KSBJ version 1.0 20181129"
+'
+'version 1.1 20190120
+'version 1.2 20200214 fixed high cpu usage
+print "KSBJ version 1.2 20200214"
 
 
 '-------------------------------------------------
@@ -247,7 +249,7 @@ sub queueaction(act as string)
    if act = "los" or act = "win" or act = "off" then
     checkdo = act
     do 
-	 sleep 1000
+	 sleep 1000,1 '1.2
 	 open wfile FOR INPUT AS #6 LEN = 3
      input #6, checkdo
      CLOSE #6
@@ -256,7 +258,7 @@ sub queueaction(act as string)
     end if
     
     if act = "off" then 
-		sleep 10000
+		sleep 10000,1 '1.2
 	end if
 	
     
@@ -275,7 +277,7 @@ sub queueaction(act as string)
 		select case rdrange
 		case 1
 			act = "ris"
-			goto redo
+			'goto redo ******************
 		case 3
 			act = "ris"
 			goto redo
@@ -416,10 +418,11 @@ print "you can also use keyboard:"
 PRINT "P=play H=hit S=stay"
 print "LEFT MOUSE BUTTON OR HIT P TO START"
 do
+	sleep 10 '1.2
 	key=inkey
 	GetMouse CurrentX, CurrentY, , MouseButtons
 loop until key = "P" or key = "p" or MouseButtons = LEFTBUTTON
-sleep 99
+'sleep 99 '1.2
 
 
 Do 
@@ -665,6 +668,7 @@ Do
 	
 	If state = GameState.PlayerTurn OrElse state = GameState.GameOver Then
 		key = ""
+		sleep 10 '1.2
 		key = InKey
 		GetMouse CurrentX, CurrentY, , MouseButtons
 		
